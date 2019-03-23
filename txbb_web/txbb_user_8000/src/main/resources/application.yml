@@ -1,0 +1,25 @@
+
+server:
+  port: 8000
+spring:
+  application:
+    name: txbb-user
+  datasource:
+    url: jdbc:mysql://localhost/txbb
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: 192.168.183.135
+    password: root
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/mybatis/mapper/*.xml
+logging:
+  config: classpath:log4j2.xml
+
+

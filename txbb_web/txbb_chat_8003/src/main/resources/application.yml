@@ -1,0 +1,27 @@
+
+server:
+  port: 8003
+spring:
+  application:
+    name: txbb-chat
+  rabbitmq:
+      host: 192.168.183.135
+      port: 5672
+      username: root
+      password: root
+      virtual-host: txbb
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://localhost/txbb
+    driver-class-name: com.mysql.jdbc.Driver
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka
+zk:
+  host: 192.168.183.135:2181
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/mybatis/mapper/*.xml

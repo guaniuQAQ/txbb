@@ -1,0 +1,25 @@
+
+server:
+  port: 8001
+spring:
+  application:
+    name: txbb-res
+  servlet:
+    multipart:
+      max-file-size: 10MB
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka
+fdfs:
+  pool:
+    jmx-enabled: false
+  so-timeout: 1500
+  connect-timeout: 3000
+  thumb-image:
+    width: 80
+    height: 80
+  tracker-list:
+    - 192.168.183.134:22122
+  server:
+    ip: http://192.168.183.134/

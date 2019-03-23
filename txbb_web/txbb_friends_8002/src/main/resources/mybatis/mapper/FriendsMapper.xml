@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wrf.txbb_friends_8002.dao.IFriendsDao">
+
+    <resultMap id="friendsRequestMap" type="entity.FriendsRequest">
+        <id column="id" property="id"/>
+        <result column="from_id" property="fromId"/>
+        <result column="to_id" property="toId"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <association property="fromUser" javaType="entity.User">
+            <id column="uid" property="id"/>
+            <result column="username" property="username"/>
+            <result column="nickname" property="nickname"/>
+            <result column="head_url" property="headUrl"/>
+            <result column="head_url_small" property="headUrlSmall"/>
+            <result column="nickname_pinyisn" property="nicknamePinyin"/>
+            <result column="qr_code" property="qrCode"/>
+            <result column="u_create_time" property="createTime"/>
+            <result column="u_update_time" property="updateTime"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="friendsMap" type="entity.Friends">
+        <id column="uid" property="uid"/>
+        <id column="fid" property="fid"/>
+        <result column="status" property="status"/>
+        <association property="friends" javaType="entity.User">
+            <id column="id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="nickname" property="nickname"/>
+            <result column="head_url" property="headUrl"/>
+            <result column="head_url_small" property="headUrlSmall"/>
+            <result column="nickname_pinyin" property="nicknamePinyin"/>
+            <result column="qr_code" property="qrCode"/>
+        </association>
+    </resultMap>
+
+    <sql id="user">
+        u.id as uid,u.username,u.nickname,u.head_url,u.head_url_small,
+        u.nickname_pinyin,u.qr_code,u.status as u_status,
+        u.create_time as u_create_time,u.update_time as u_update_time
+    </sql>
+
+    <select id="selectOne" resultType="int">
+        select count(*) from friends_request where from_id = #{fromId} and to_id = #{toId} and status = 0
+    </select>
+
+    <select id="isFriends" resultType="int">
+        select count(*) from friends where uid = #{fromId} and fid = #{toId} and status != 2
+    </select>
+
+    <select id="usedToBeFriends" resultType="int">
+        select count(*) from friends where uid = #{fromId} and fid = #{toId} for update
+    </select>
+
+    <insert id="insert">
+        insert into friends_request(from_id,to_id,status) values(#{fromId},#{toId},0)
+    </insert>
+
+    <select id="searchMyRequest" resultMap="friendsRequestMap">
+        select fr.*,
+        <include refid="user"/>
+        from friends_request fr join user u on fr.from_id = u.id where fr.to_id = #{toId} order by fr.create_time desc
+    </select>
+
+    <update id="handleRequest">
+        update friends_request set status = #{status}, update_time = NOW() where id = #{id}
+    </update>
+
+    <select id="getById" resultType="entity.FriendsRequest">
+        select * from friends_request where id = #{id}
+    </select>
+
+    <insert id="toBeFriends">
+        insert into friends(uid,fid,status) values(#{fromId},#{toId},0)
+    </insert>
+
+    <update id="updFriends">
+        update friends set status = 0 where uid = #{fromId} and fid = #{toId}
+    </update>
+
+    <select id="searchFriendsListByUid" resultMap="friendsMap">
+        select f.*,u.id,u.username,u.nickname,u.head_url,u.head_url_small,u.nickname_pinyin,u.qr_code
+        from friends f join user u on f.fid = u.id
+        where f.uid = #{uid}
+    </select>
+</mapper>

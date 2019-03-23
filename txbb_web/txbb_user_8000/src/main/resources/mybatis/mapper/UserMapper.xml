@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wrf.txbb_user_8000.dao.IUserDao">
+
+    <insert id="insert">
+        insert into user(username,password,nickname,nickname_pinyin,qr_code) values(#{username},#{password},#{nickname},#{nicknamePinyin},#{qrCode})
+    </insert>
+
+    <select id="getByUsername" resultType="entity.User">
+        select * from user where username = #{username}
+    </select>
+
+    <update id="updHead">
+        update user set head_url = #{headUrl},head_url_small = #{headUrlSmall},update_time = NOW() where id = #{id}
+    </update>
+</mapper>

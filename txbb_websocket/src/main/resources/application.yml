@@ -1,0 +1,15 @@
+spring:
+  rabbitmq:
+    host: 192.168.183.135
+    port: 5672
+    username: root
+    password: root
+    virtual-host: txbb
+  redis:
+      host: 192.168.183.135
+      password: root
+ws:
+  ip: 192.168.0.176
+  port: 9000
+zk:
+  host: 192.168.183.135:2181

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wrf.dao.IChatRecordDao">
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into chat_record(from_id,to_id,msg_type,content)
+        values(#{fromId},#{toId},#{msgType},#{content})
+    </insert>
+
+    <update id="readMsg">
+        update chat_record
+        set status = 1
+        where from_id = #{fromId} and to_id = #{toId}
+        <if test="id != null">
+            and id = #{id}
+        </if>
+    </update>
+
+    <update id="msgReceived">
+        update chat_record set received = 1 where id = #{id}
+    </update>
+
+    <select id="unReceivedMsgs" resultType="entity.ChatRecord">
+        select * from chat_record where to_id = #{toId} and received = 0
+    </select>
+</mapper>
